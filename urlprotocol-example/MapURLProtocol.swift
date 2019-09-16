@@ -9,9 +9,6 @@ class MapURLProtocol: URLProtocol {
         return request
     }
     
-//    override class func requestIsCacheEquivalent(_ a: URLRequest, to b: URLRequest) -> Bool {
-//        return super.requestIsCacheEquivalent(a, to: b)
-//    }
     
     override func startLoading() {
         guard let url = request.url,
