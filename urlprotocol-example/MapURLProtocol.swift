@@ -9,6 +9,7 @@ class MapURLProtocol: URLProtocol {
         return request
     }
     
+    var thread: Thread!
     
     override func startLoading() {
         guard let url = request.url,
@@ -17,6 +18,8 @@ class MapURLProtocol: URLProtocol {
                 fail(with: .badURL)
                 return
         }
+        
+        thread = Thread.current
         
         if let cachedResponse = cachedResponse {
             complete(with: cachedResponse)
@@ -40,11 +43,13 @@ class MapURLProtocol: URLProtocol {
     }
     
     func handle(snapshot: MKMapSnapshotter.Snapshot?, error: Error?) {
-        if let snapshot = snapshot,
-            let data = snapshot.image.jpegData(compressionQuality: 0.7) {
-            complete(with: data)
-        } else if let error = error {
-            fail(with: error)
+        thread.execute {
+            if let snapshot = snapshot,
+                let data = snapshot.image.jpegData(compressionQuality: 0.7) {
+                self.complete(with: data)
+            } else if let error = error {
+                self.fail(with: error)
+            }
         }
     }
     
