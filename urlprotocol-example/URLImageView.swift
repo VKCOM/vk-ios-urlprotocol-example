@@ -29,11 +29,11 @@ class URLImageView: UIImageView, URLSessionDataDelegate {
         if self.taskId == taskId,
             let data = data,
             let image = UIImage(data: data, scale: UIScreen.main.scale) {
-            didLoadRemote(image: image, data: data)
+            didLoadRemote(image: image)
         }
     }
     
-    func didLoadRemote(image: UIImage, data: Data) {
+    func didLoadRemote(image: UIImage) {
         DispatchQueue.main.async {
             self.image = image
         }
